@@ -1,0 +1,43 @@
+
+# Description of what this change includes
+# Revision number
+# Date
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create a VPC spanning at least 3 Availability Zones in us-west-2.
+
+Resources:
+  StudentVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: VPC-alamat6092
+
+  RdsInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      VPCSecurityGroups:
+        - <SECURITY-GROUP-ID>
+      AllocatedStorage: 5
+      DBInstanceClass: db.t3.micro
+      DBInstanceIdentifier: playground-db
+      Engine: mysql
+      MasterUsername: Admin
+      MasterUserPassword: "CloudAcademy123!"
+
+Outputs:
+  VPCId:
+    Description: ID of the created VPC
+    Value: !Ref StudentVPC
+
+  Region:
+    Description: Intended deployment region
+    Value: us-west-2
+
+  AvailabilityZones:
+    Description: Minimum AZ coverage requirement for deployment planning
+    Value: "us-west-2a, us-west-2b, us-west-2c"
